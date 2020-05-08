@@ -136,7 +136,8 @@ public class ExtFlightDelaysDAO {
 		String sql = "select flights.`ORIGIN_AIRPORT_ID`, flights.`DESTINATION_AIRPORT_ID`,  avg(distance) as media "
 				+ "from  flights "
 				+ "where (flights.`ORIGIN_AIRPORT_ID` = ? ) or ( flights.`DESTINATION_AIRPORT_ID`=?) "
-				+ "group by flights.`ORIGIN_AIRPORT_ID`, flights.`DESTINATION_AIRPORT_ID`"; 
+				+ "group by flights.`ORIGIN_AIRPORT_ID`, flights.`DESTINATION_AIRPORT_ID` ";
+		
 		// non posso fare come approccio 3 che ordino perchè => se metto 0 allora sarà il primo che vedo
 		//se metto 93, prima vedrò gli id di partenza <
 		//devo fissare vertice partenza = vertice passato 
@@ -161,12 +162,16 @@ public class ExtFlightDelaysDAO {
 					CoppiaAeroporti c = new CoppiaAeroporti(idMap.get(idP), idMap.get(idA), media);
 					if (!lista.contains(c)) {
 						lista.add(c);
-					} else {
+					} else {   
+						//perchè se cerco 93 => la prima riga potrebbe essere partenza =x destinazione =93, quindi
+						//entra nell'altro else => crea, quando poi si incontrerà la riga in cui partenza = 93 arrivo=x
+						//entra nel primo if, e deve controllare la lista
 						CoppiaAeroporti temp = lista.get(lista.indexOf(c));
 						temp.aggiornaMedia(media);
 					}
 
-				} else {
+				} 
+				else {
 					CoppiaAeroporti c = new CoppiaAeroporti(idMap.get(idA),idMap.get(idP), media);
 
 					if (!lista.contains(c)) {
@@ -237,15 +242,9 @@ public class ExtFlightDelaysDAO {
 						lista.add(c);
 						
 					}
-		
-		
-					
 				}
-
-
 			}
-
-			
+	
 			conn.close();
 			return lista;
 

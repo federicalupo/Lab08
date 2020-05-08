@@ -27,21 +27,25 @@ public class Model {
 		Graphs.addAllVertices(this.grafo, dao.loadAllAirports());
 
 		for (Airport a : this.grafo.vertexSet()) {
+			
 			idMap.put(a.getId(), a);
 		}
 		
 		
-		/*3 approccio*/
+	//ERRORE : DEVO AGGIUNGERE SOLO ARCHI LA CUI MEDIA  (PESO) > DISTANZA PASSATA!!!!
+		
+		/*3 approccio*///	 ===> stampa : primo vertice < secondo vertice, archi ordinati
 		
 		List<CoppiaAeroporti> coppie = dao.coppie(idMap);
 		for(CoppiaAeroporti c : coppie) {
-			Graphs.addEdge(this.grafo, c.getAeroportoP(), c.getAeroportoA(), c.getMedia());
+			if(c.getMedia() > distanzaMin)
+				Graphs.addEdge(this.grafo, c.getAeroportoP(), c.getAeroportoA(), c.getMedia());
 			
 		}
 		
 		
 
-		/* 2 approccio
+		/* 2 approccio   => stampa a caso
 
 		for (Airport a : this.grafo.vertexSet()) {
 
@@ -49,7 +53,7 @@ public class Model {
 
 			for (CoppiaAeroporti c : connesse) {
 
-				if (!this.grafo.containsEdge(c.getAeroportoA(), c.getAeroportoP())) {
+				if (!this.grafo.containsEdge(c.getAeroportoA(), c.getAeroportoP()) && c.getMedia() > distanzaMin) { //CONDIZIONE
 					Graphs.addEdge(this.grafo, c.getAeroportoA(), c.getAeroportoP(), c.getMedia());
 				}
 
@@ -58,22 +62,20 @@ public class Model {
 		}*/
 		
 
-		/* 1 approccio 
-		  for (Airport a1 : this.grafo.vertexSet()) 
-		  { for (Airport a2 : this.grafo.vertexSet()) {
+		/* 1 approccio    ===> stampa : primo vertice < secondo vertice, archi ordinati
+		  for (Airport a1 : this.grafo.vertexSet())  { 
+			  for (Airport a2 : this.grafo.vertexSet()) {
 		  
-		  if (a1.getId() < a2.getId()) {
-		   //if(!this.grafo.containsEdge(a1, a2)) { uguale
-		  		double peso = this.dao.getPeso(a1, a2);
+				  if (a1.getId() < a2.getId()) {
+					  //if(!this.grafo.containsEdge(a1, a2)) { uguale
+					  double peso = this.dao.getPeso(a1, a2);
 		  
-		  		if (peso > 0 && peso> distanzaMin) { // aggiungi arco
-					Graphs.addEdge(this.grafo, a1, a2, peso);
-		 
-		 			}
-		  
-		  			} 
+					  if (peso > 0 && peso> distanzaMin) { // aggiungi arco
+						  	Graphs.addEdge(this.grafo, a1, a2, peso);
+					  		}
+		          	} 
 		      }
-		   }*/
+		   } */
 	   
 
 	}
@@ -85,4 +87,19 @@ public class Model {
 	public int nArchi() {
 		return this.grafo.edgeSet().size();
 	}
+	
+	public String stampaArchiDistanza(){
+		
+		String s="";
+		
+		for( DefaultWeightedEdge d: this.grafo.edgeSet()) {
+			
+			s+= String.format("Partenza: %s   -->   Arrivo: %s    Distanza: %g\n", this.grafo.getEdgeSource(d), grafo.getEdgeTarget(d), this.grafo.getEdgeWeight(d));	
+		}
+	
+		
+		return s;
+		
+	}
+	
 }

@@ -35,14 +35,25 @@ public class FXMLController {
 
     @FXML
     void doAnalizzaAeroporti(ActionEvent event) {
+    	this.txtResult.clear();
+    	Integer distanza;
+    	
+    	try {
+    		distanza = Integer.parseInt(this.distanzaMinima.getText());  //provo decimali
+    		
+    		this.model.creaGrafo(distanza);
+    		
+    		this.txtResult.appendText(String.format("Numero vertici grafo: %d\n", model.nVertici()));
+    		this.txtResult.appendText(String.format("Numero archi grafo: %d\n", model.nArchi()));
+    		
+    		this.txtResult.appendText(model.stampaArchiDistanza());
+    		
+    		
+    	}catch(NumberFormatException nfe) {
+    		this.txtResult.appendText("Inserisci valore corretto");
+    	}
     	
     	
-    	
-    	
-    	
-    	
-    	
-    	//TODO
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
