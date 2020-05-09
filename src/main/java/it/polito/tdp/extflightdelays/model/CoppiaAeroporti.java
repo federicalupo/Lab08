@@ -6,6 +6,7 @@ public class CoppiaAeroporti {
 	private Airport aeroportoA;
 	private double media;
 	private int n;
+	private double somma;
 	
 	public CoppiaAeroporti(Airport aeroportoP, Airport aeroportoA, double media) {
 		super();
@@ -13,6 +14,7 @@ public class CoppiaAeroporti {
 		this.aeroportoA = aeroportoA;
 		this.media = media;
 		n=1;
+		somma=media;
 	}
 
 	public Airport getAeroportoP() {
@@ -73,8 +75,9 @@ public class CoppiaAeroporti {
 	}
 
 	public void aggiornaMedia(double mediaPassata) {
-		n++;
-		this.media = (this.media+mediaPassata)/n;
+		n++; //in realtà rimane a 2
+		somma+=mediaPassata;
+		this.media = somma/n;
 		
 	}
 
